@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String algorithm;
     private String iteration;
 
-    private BubbleSort bubbleSort;
     private JSONArray data;
 
     private void initComponents() {
@@ -67,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private JSONArray readJsonFromAsset() {
         try {
-            InputStream inputStream = getAssets().open("data_bubble_sort.json"); // Membaca file JSON
+            InputStream inputStream = getAssets().open("bubble_insertion.json"); // Membaca file JSON
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             StringBuilder stringBuilder = new StringBuilder();
             String line;
@@ -105,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listview.setAdapter(executionTimesAdapter);
 
         data = readJsonFromAsset();
-        bubbleSort = new BubbleSort(data);
         startBenchmarkButton.setOnClickListener(this);
         lineChartExecutionTimeButton.setOnClickListener(this);
     }
@@ -141,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case "Bubble Sorting":
                         startBenchmarkBubbleSort(Integer.valueOf(iteration));
                         break;
-//                    case "Insertion Sorting": startBenchmarkBubbleSort(); break;
+                    case "Insertion Sorting": startBenchmarkInsertionSort(Integer.valueOf(iteration)); break;
 //                    case "Quick Sorting": startBenchmarkBubbleSort(); break;
 //                    case "Shell Sorting": startBenchmarkBubbleSort(); break;
                 }
@@ -164,16 +161,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startBenchmarkBubbleSort(Integer iteration) {
         for (int i = 1; i <= iteration; i++) {
+            JSONArray data = readJsonFromAsset();
             long start = System.currentTimeMillis();
-            JSONArray sorted = bubbleSort.sort();
+            JSONArray sorted = BubbleSort.sort(data);
             long measureTimeMills = System.currentTimeMillis() - start;
-            Log.i("SETELAH DI SORTING", String.valueOf(sorted));
-
             executionTimes.add(measureTimeMills); // menyimpan data execution time
             final int iterationIndex = i;
             handler.post(() -> {
                 executionTimesAdapter.add("Pengujian iterasi "+ iterationIndex +" data berhasil diurutkan");
             });
+            Log.i("SETELAH DI SORTING", String.valueOf(sorted));
+        }
+    }
+
+    private void startBenchmarkInsertionSort(Integer iteration) {
+        for (int i = 1; i <= iteration; i++) {
+            JSONArray data = readJsonFromAsset();
+            long start = System.currentTimeMillis();
+            JSONArray sorted = InsertionSort.sort(data);
+            long measureTimeMills = System.currentTimeMillis() - start;
+            executionTimes.add(measureTimeMills); // menyimpan data execution time
+            final int iterationIndex = i;
+            handler.post(() -> {
+                executionTimesAdapter.add("Pengujian iterasi "+ iterationIndex +" data berhasil diurutkan");
+            });
+            Log.i("SETELAH DI SORTING", String.valueOf(sorted));
         }
     }
 

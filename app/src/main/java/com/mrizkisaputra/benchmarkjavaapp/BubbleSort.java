@@ -7,13 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class BubbleSort {
-    private JSONArray data;
-
-    public BubbleSort(JSONArray data) {
-        this.data = data;
-    }
-
-    public JSONArray sort() {
+    public static JSONArray sort(JSONArray data) {
         Log.i("SEBELUM DI SORTING", data.toString());
         int n = data.length();
         for (int i = 0; i < n - 1; i++) {
