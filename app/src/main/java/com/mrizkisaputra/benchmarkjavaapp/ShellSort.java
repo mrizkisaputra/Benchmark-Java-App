@@ -15,12 +15,12 @@ public class ShellSort {
                 try {
                     JSONObject temp = data.getJSONObject(i);
                     int j;
-                    for (j = i; j >= interval && data.getJSONObject(j - interval).toString().compareTo(temp.toString()) > 0; j -= interval) {
+                    for (j = i; j >= interval && data.getJSONObject(j - interval).getInt("nomorAntrian") > temp.getInt("nomorAntrian"); j -= interval) {
                         data.put(j, data.getJSONObject(j - interval));
                     }
                     data.put(j, temp);
                 } catch (JSONException e) {
-                    new RuntimeException(e);
+                    e.printStackTrace();
                 }
             }
         }
