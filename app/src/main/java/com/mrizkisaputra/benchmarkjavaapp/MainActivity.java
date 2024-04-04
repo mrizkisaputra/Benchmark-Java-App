@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -63,9 +64,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listview = findViewById(R.id.listview);
     }
 
-    private JSONArray readJsonFromAsset() {
+    private JSONArray readJsonFromAsset(String algorithm) {
+        InputStream inputStream = null;
         try {
-            InputStream inputStream = getAssets().open("bubble_insertion.json"); // Membaca file JSON
+            if (Objects.equals(algorithm, "Insertion Sorting") || Objects.equals(algorithm, "Bubble Sorting")) {
+                inputStream = getAssets().open("bubble_insertion.json"); // Membaca file JSON
+            } else {
+                inputStream = getAssets().open("quick_shell.json"); // Membaca file JSON
+            }
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             StringBuilder stringBuilder = new StringBuilder();
             String line;
@@ -102,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         executionTimesAdapter = new ArrayAdapter<>(this, R.layout.item_list, R.id.text);
         listview.setAdapter(executionTimesAdapter);
 
-        data = readJsonFromAsset();
         startBenchmarkButton.setOnClickListener(this);
         lineChartExecutionTimeButton.setOnClickListener(this);
     }
@@ -139,8 +144,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startBenchmarkBubbleSort(Integer.valueOf(iteration));
                         break;
                     case "Insertion Sorting": startBenchmarkInsertionSort(Integer.valueOf(iteration)); break;
-//                    case "Quick Sorting": startBenchmarkBubbleSort(); break;
-//                    case "Shell Sorting": startBenchmarkBubbleSort(); break;
+//                    case "Quick Sorting": startBenchmarkShellSort(Integer.valueOf(iteration)); break;
+                    case "Shell Sorting": startBenchmarkShellSort(Integer.valueOf(iteration)); break;
                 }
                 handler.post(() -> {
                     benchmarkProgressBar.setVisibility(View.GONE);
@@ -161,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startBenchmarkBubbleSort(Integer iteration) {
         for (int i = 1; i <= iteration; i++) {
-            JSONArray data = readJsonFromAsset();
+            data = readJsonFromAsset(algorithm);
             long start = System.currentTimeMillis();
             JSONArray sorted = BubbleSort.sort(data);
             long measureTimeMills = System.currentTimeMillis() - start;
@@ -176,9 +181,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startBenchmarkInsertionSort(Integer iteration) {
         for (int i = 1; i <= iteration; i++) {
-            JSONArray data = readJsonFromAsset();
+            data = readJsonFromAsset(algorithm);
             long start = System.currentTimeMillis();
             JSONArray sorted = InsertionSort.sort(data);
+            long measureTimeMills = System.currentTimeMillis() - start;
+            executionTimes.add(measureTimeMills); // menyimpan data execution time
+            final int iterationIndex = i;
+            handler.post(() -> {
+                executionTimesAdapter.add("Pengujian iterasi "+ iterationIndex +" data berhasil diurutkan");
+            });
+            Log.i("SETELAH DI SORTING", String.valueOf(sorted));
+        }
+    }
+
+    private void startBenchmarkShellSort(Integer iteration) {
+        for (int i = 1; i <= iteration; i++) {
+            data = readJsonFromAsset(algorithm);
+            long start = System.currentTimeMillis();
+            JSONArray sorted = ShellSort.sort(data);
             long measureTimeMills = System.currentTimeMillis() - start;
             executionTimes.add(measureTimeMills); // menyimpan data execution time
             final int iterationIndex = i;
