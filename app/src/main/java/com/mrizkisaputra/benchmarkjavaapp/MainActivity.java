@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startBenchmarkBubbleSort(Integer.valueOf(iteration));
                         break;
                     case "Insertion Sorting": startBenchmarkInsertionSort(Integer.valueOf(iteration)); break;
-//                    case "Quick Sorting": startBenchmarkShellSort(Integer.valueOf(iteration)); break;
+                    case "Quick Sorting": startBenchmarkQuickSort(Integer.valueOf(iteration)); break;
                     case "Shell Sorting": startBenchmarkShellSort(Integer.valueOf(iteration)); break;
                 }
                 handler.post(() -> {
@@ -206,6 +206,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 executionTimesAdapter.add("Pengujian iterasi "+ iterationIndex +" data berhasil diurutkan");
             });
             Log.i("SETELAH DI SORTING", String.valueOf(sorted));
+        }
+    }
+
+    private void startBenchmarkQuickSort(Integer iteration) {
+        for (int i = 1; i <= iteration; i++) {
+            data = readJsonFromAsset(algorithm);
+            Log.i("SEBELUM DI SORTING", data.toString());
+            long start = System.currentTimeMillis();
+            QuickSort.sort(data, 0, data.length() - 1);
+            long measureTimeMills = System.currentTimeMillis() - start;
+            executionTimes.add(measureTimeMills); // menyimpan data execution time
+            final int iterationIndex = i;
+            handler.post(() -> {
+                executionTimesAdapter.add("Pengujian iterasi "+ iterationIndex +" data berhasil diurutkan");
+            });
+            Log.i("SETELAH DI SORTING", String.valueOf(data));
         }
     }
 
