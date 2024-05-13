@@ -13,12 +13,14 @@ public class ShellSort {
         for (int interval = n / 2; interval > 0; interval /= 2) {
             for (int i = interval; i < n; i++) {
                 try {
-                    JSONObject temp = data.getJSONObject(i);
-                    int j;
-                    for (j = i; j >= interval && data.getJSONObject(j - interval).getInt("nomorAntrian") > temp.getInt("nomorAntrian"); j -= interval) {
+                    JSONObject key = data.getJSONObject(i);
+                    int j = i;
+
+                    while (j >= interval && data.getJSONObject(j-interval).getInt("nomorAntrian") > key.getInt("nomorAntrian")) {
                         data.put(j, data.getJSONObject(j - interval));
+                        j = j - interval;
                     }
-                    data.put(j, temp);
+                    data.put(j, key);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

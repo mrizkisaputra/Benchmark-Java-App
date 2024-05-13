@@ -1,7 +1,5 @@
 package com.mrizkisaputra.benchmarkjavaapp;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,9 +10,7 @@ public class QuickSort {
         // Pilih elemen pivot
         JSONObject pivot = data.getJSONObject(high);
         int pivotValue = pivot.getInt("nomorAntrian");
-
         int i = (low - 1); // Indeks dari elemen yang lebih kecil
-
         for (int j = low; j < high; j++) {
             // Jika elemen saat ini lebih kecil atau sama dengan pivot
             if (data.getJSONObject(j).getInt("nomorAntrian") <= pivotValue) {
@@ -34,11 +30,11 @@ public class QuickSort {
 
         return i + 1;
     }
+
     public static void sort(JSONArray data, int low, int high) {
         if (low < high) {
             try {
-                // Membagi array dan mendapatkan indeks pivot
-                int pi = partition(data, low, high);
+                int pi = partition(data, low, high); // Membagi array dan mendapatkan indeks pivot
 
                 // Memanggil quickSort() rekursif untuk dua subarray sebelum dan setelah pivot
                 sort(data, low, pi - 1);

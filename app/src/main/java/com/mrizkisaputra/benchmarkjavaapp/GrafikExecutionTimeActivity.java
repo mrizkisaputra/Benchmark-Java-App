@@ -19,7 +19,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,12 +77,12 @@ public class GrafikExecutionTimeActivity extends AppCompatActivity {
             }
             double averagesMillis = total / executionTimes.size();
             double averagesSecond = averagesMillis / executionTimes.size() / 1000;
-            averageMillisecondTextView.setText("Rata-rata : "+averagesMillis+" ms");
-            averageSecondTextView.setText("Rata-rata : "+averagesSecond+" second");
+            averageMillisecondTextView.setText("Rata-rata : " + averagesMillis + " ms");
+            averageSecondTextView.setText("Rata-rata : " + averagesSecond + " second");
             setDataLineChart(executionTimes);
         }
-        algorithmTextView.setText("Algoritma : "+algorithm);
-        totalInputDataTextView.setText("Jumlah data : "+size);
+        algorithmTextView.setText("Algoritma : " + algorithm);
+        totalInputDataTextView.setText("Jumlah data : " + size);
     }
 
     void setDataLineChart(List<Long> executionTimes) {
@@ -93,7 +92,7 @@ public class GrafikExecutionTimeActivity extends AppCompatActivity {
         for (int i = 0; i < executionTimes.size(); i++) {
             // Tambahkan setiap nilai ke dalam Entry
             entries.add(new Entry(i, executionTimes.get(i)));
-            valueBottom.add(""+i+1);
+            valueBottom.add("" + i + 1);
         }
 
         XAxis xAxis = lineChart.getXAxis();
@@ -106,7 +105,7 @@ public class GrafikExecutionTimeActivity extends AppCompatActivity {
         executionTime.setColor(Color.BLUE);
         executionTime.setValueTextColor(Color.RED);
 
-        LineData lineData = new  LineData(executionTime);
+        LineData lineData = new LineData(executionTime);
         lineChart.setData(lineData);
         lineChart.invalidate();
     }
